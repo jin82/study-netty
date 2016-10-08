@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello</title>
+</head>
+<body>
+Hello World!
+
+<input type="text" id="msg"/>
+<input type="button" id="button">
+<br/>
+<textarea id="allMsg">
+
+</textarea>
+</body>
+</html>
+<script type="text/javascript">
+
+    var msgValue = document.getElementById("msg");
+    var butt = document.getElementById("button");
+    var show = document.getElementById('allMsg');
+
+    butt.onclick = function () {
+      var msg = msgValue.value;
+        sendMessage(msg);
+    };
+
+
+
+
+    var wsServer = 'wss://localhost:8080/ws';
+    var ws = new WebSocket(wsServer);
+
+    ws.onopen = function (e) {
+        console.log("Connected to WebSocket server.",e)
+    };
+
+    ws.onclose = function (e) {
+        console.log("DisConnected", e);
+    };
+
+    ws.onmessage = function (e) {
+        console.log("RECEIVED: "+ e.data);
+        show.value = e.data;
+    };
+
+    ws.onerror = function (e) {
+        console.log("ERROR occured" + e.data, e);
+    };
+
+
+
+    var sendMessage = function (msg) {
+        ws.send(msg);
+        console.log("SEND : " + msg);
+    }
+</script>
